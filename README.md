@@ -6,7 +6,7 @@ A collection of small Dart snippets and scripts provided as reusable packages.
 
 | Package | Description |
 |---------|-------------|
-| [todo_or_die](todo-or-die) | Write TODOs in code that ensure you actually do them, with deadlines or other conditions as triggers. |
+| [todo_or_die](todo_or_die) | Write TODOs in code that ensure you actually do them, with deadlines or other conditions as triggers. |
 
 ## Usage
 
@@ -17,5 +17,5 @@ dependencies:
   todo_or_die:
     git:
       url: https://github.com/komposten/dart-library.git
-      path: todo-or-die
+      path: todo_or_die
 ```

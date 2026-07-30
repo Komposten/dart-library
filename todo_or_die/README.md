@@ -20,7 +20,7 @@ dependencies:
   todo_or_die:
     git:
       url: https://github.com/komposten/dart-library.git
-      path: todo-or-die
+      path: todo_or_die
 ```
 
 ## Usage
