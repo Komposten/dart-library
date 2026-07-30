@@ -54,7 +54,20 @@ void main() {
                 e is TodoIsDueError &&
                 e.message == 'Test' &&
                 e.by == null &&
-                e.given == isTrue,
+                e.given == 'conditions are met',
+          ),
+        ),
+      );
+
+      expect(
+        () => todoOrDie('Test', given: isTrue, givenDesription: 'true'),
+        throwsA(
+          predicate(
+            (e) =>
+                e is TodoIsDueError &&
+                e.message == 'Test' &&
+                e.by == null &&
+                e.given == 'true',
           ),
         ),
       );
@@ -69,7 +82,7 @@ void main() {
                 e is TodoIsDueError &&
                 e.message == 'Test' &&
                 e.by == yesterday &&
-                e.given == isTrue,
+                e.given == 'conditions are met',
           ),
         ),
       );
@@ -78,7 +91,11 @@ void main() {
 
   group('customAlerter', () {
     final alerts = <String>[];
-    setUpAll(() => TodoOrDie.configure(alerter: (m, b, g) => alerts.add(m)));
+    setUpAll(
+      () => TodoOrDie.configure(
+        alerter: (m, b, g) => alerts.add(TodoIsDueError(m, b, g).toString()),
+      ),
+    );
     setUp(() => alerts.clear());
 
     tearDownAll(() => TodoOrDie.configure());
@@ -88,7 +105,12 @@ void main() {
         () => todoOrDie('Test', by: yesterday, given: isTrue),
         returnsNormally,
       );
-      expect(alerts, equals(['Test']));
+      expect(
+        alerts,
+        equals([
+          'TODO: "Test" is due since $yesterday has passed and conditions are met',
+        ]),
+      );
     });
   });
 }

@@ -42,10 +42,22 @@ A `TodoIsDueError` is thrown once the current date is past the given date.
 ### With a condition
 
 ```dart
-todoOrDie('Rewrite this to scale better', given: () => userCount() > 1000);
+todoOrDie('Rewrite this to scale better', given: () => userCount() >= 1000);
 ```
 
 A `TodoIsDueError` is thrown when the condition evaluates to `true`.
+
+You can provide a description of the condition using `givenDesription`:
+
+```dart
+todoOrDie(
+  'Rewrite this to scale better',
+  given: () => userCount() >= 1000,
+  givenDesription: 'we have reached 1000 users',
+);
+```
+
+When provided, the description is included in the error message and is accessible via `TodoIsDueError.given`.
 
 ### With both a date and a condition
 
@@ -54,6 +66,8 @@ todoOrDie('Migrate to new API', by: DateTime(2026, 08, 15), given: () => apiVers
 ```
 
 The error is thrown only when **both** the due date has passed **and** the condition is `true`.
+
+You can also add a `givenDesription` here to describe the condition.
 
 ### Custom alerter
 
@@ -73,3 +87,10 @@ TodoOrDie.configure(
 ```
 
 Reset to the default throw behavior by calling `TodoOrDie.configure()` with no arguments.
+
+### The `TodoIsDueError` object
+
+The error has three properties:
+- `message` — the TODO message.
+- `by` — the due date, or `null` if not set.
+- `given` — the condition description (the value of `givenDesription`), or `null` if no condition was set.

@@ -6,7 +6,7 @@ A collection of small Dart snippets and scripts provided as reusable packages.
 
 | Package | Description |
 |---------|-------------|
-| [todo_or_die](todo-or-die) | Write TODOs in code that ensure you actually do them. |
+| [todo_or_die](todo-or-die) | Write TODOs in code that ensure you actually do them, with deadlines or other conditions as triggers. |
 
 ## Usage
 
