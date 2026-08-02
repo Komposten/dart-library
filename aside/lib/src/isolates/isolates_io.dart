@@ -1,7 +1,7 @@
 import 'dart:async';
 import 'dart:isolate';
 import 'package:aside/src/isolates/isolates.dart' as i;
-import 'package:aside/src/isolates/token/isolate_token_mock.dart';
+import 'package:aside/src/isolates/token/isolate_token.dart' as token;
 
 class _IOIsolate implements i.Isolate {
   final Isolate _isolate;
@@ -79,7 +79,7 @@ class Isolates {
   static String get currentName =>
       Isolate.current.debugName ?? '<unnamed isolate>';
 
-  static Object? get rootIsolateToken => RootIsolateToken.instance;
+  static Object? get rootIsolateToken => token.rootIsolateToken;
 
   static i.ReceivePort receivePort() => _IOReceivePort();
 
