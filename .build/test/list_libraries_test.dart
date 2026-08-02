@@ -1,3 +1,4 @@
+@OnPlatform({'browser': Skip('This code is only run in CI, never on browser')})
 import 'dart:convert';
 import 'dart:io';
 
