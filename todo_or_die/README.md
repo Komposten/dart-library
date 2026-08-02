@@ -21,6 +21,7 @@ dependencies:
     git:
       url: https://github.com/komposten/dart-library.git
       path: todo_or_die
+      ref: <commit hash>
 ```
 
 ## Usage
