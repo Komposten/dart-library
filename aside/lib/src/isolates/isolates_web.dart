@@ -14,7 +14,10 @@ class _WebIsolate<T> implements i.Isolate {
       _onError = onError;
 
   Future<void> _start() => Future.delayed(Duration.zero, () async {
-    await runZonedGuarded(() async => _entryPoint(_message), (e, st) => _onError?.send([e, st]));
+    await runZonedGuarded(
+      () async => _entryPoint(_message),
+      (e, st) => _onError?.send([e, st]),
+    );
   });
 
   @override
@@ -36,7 +39,12 @@ class _WebReceivePort implements i.ReceivePort {
     void Function()? onDone,
     bool? cancelOnError,
   }) {
-    return _sendPort.streamController.stream.listen(onData, onError: onError, onDone: onDone, cancelOnError: cancelOnError);
+    return _sendPort.streamController.stream.listen(
+      onData,
+      onError: onError,
+      onDone: onDone,
+      cancelOnError: cancelOnError,
+    );
   }
 
   @override

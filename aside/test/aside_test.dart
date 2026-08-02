@@ -14,7 +14,11 @@ void streamValues(int x, MessageChannel<String> channel) {
   }
 }
 
-void biStreamValues(void v, MessageChannel<String> channel, Stream<Object> stream) async {
+void biStreamValues(
+  void v,
+  MessageChannel<String> channel,
+  Stream<Object> stream,
+) async {
   final endSignal = Completer<void>();
   channel.data('waiting');
 
@@ -49,7 +53,10 @@ void main() {
       });
 
       test('errorResult throwsAsideRemoteException', () async {
-        expect(() => Aside.run(throwError, 1), throwsA(isA<AsideRemoteException>()));
+        expect(
+          () => Aside.run(throwError, 1),
+          throwsA(isA<AsideRemoteException>()),
+        );
       });
     });
 
@@ -101,7 +108,10 @@ void main() {
           await stream.toList();
         } catch (e) {
           expect(e, isA<AsideRemoteException>());
-          expect((e as AsideRemoteException).error, equals('Received error: <error>'));
+          expect(
+            (e as AsideRemoteException).error,
+            equals('Received error: <error>'),
+          );
         }
       });
     });

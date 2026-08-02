@@ -9,7 +9,9 @@ class _IOIsolate implements i.Isolate {
   _IOIsolate(this._isolate);
 
   @override
-  void kill({required bool immediate}) => _isolate.kill(priority: immediate ? Isolate.immediate : Isolate.beforeNextEvent);
+  void kill({required bool immediate}) => _isolate.kill(
+    priority: immediate ? Isolate.immediate : Isolate.beforeNextEvent,
+  );
 }
 
 class _IOReceivePort implements i.ReceivePort {
@@ -74,7 +76,8 @@ class _IOSendPort implements i.SendPort {
 }
 
 class Isolates {
-  static String get currentName => Isolate.current.debugName ?? '<unnamed isolate>';
+  static String get currentName =>
+      Isolate.current.debugName ?? '<unnamed isolate>';
 
   static Object? get rootIsolateToken => RootIsolateToken.instance;
 

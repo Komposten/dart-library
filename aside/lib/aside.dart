@@ -9,5 +9,6 @@
 /// (no service worker or web worker is used). The API is identical across all
 /// platforms.
 library;
+
 export 'src/aside_base.dart';
 export 'src/isolates/isolates.dart';
