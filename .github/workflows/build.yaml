@@ -52,11 +52,15 @@ jobs:
       - name: Install dependencies
         run: dart pub get
 
-      - name: Run tests
-        run: dart test
+      - parallel:
+        - name: Run tests (Dart VM)
+          run: dart test --platform vm
 
-      - name: Run analyzer
-        run: dart analyze --fatal-infos
+        - name: Run tests (Web)
+          run: dart test --platform chrome
 
-      - name: Check formatting
-        run: dart format --output=none --set-exit-if-changed .
+        - name: Run analyzer
+          run: dart analyze --fatal-infos
+
+        - name: Check formatting
+          run: dart format --output=none --set-exit-if-changed .
