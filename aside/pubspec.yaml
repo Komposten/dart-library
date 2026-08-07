@@ -1,6 +1,6 @@
 name: aside
 description: Convenient and simple cross-platform isolate runners
-version: 1.0.0
+version: 1.0.1
 repository: https://github.com/komposten/dart-library
 
 environment:
