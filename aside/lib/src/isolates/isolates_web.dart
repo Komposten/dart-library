@@ -1,7 +1,6 @@
 import 'dart:async';
 
 import 'package:aside/src/isolates/isolates.dart' as i;
-import 'package:aside/src/isolates/token/isolate_token.dart' as token;
 
 class _WebIsolate<T> implements i.Isolate {
   final void Function(T) _entryPoint;
@@ -67,7 +66,7 @@ class _WebSendPort implements i.SendPort {
 class Isolates {
   static String get currentName => 'main';
 
-  static Object? get rootIsolateToken => token.rootIsolateToken;
+  static Object? get rootIsolateToken => null;
 
   static i.ReceivePort receivePort() => _WebReceivePort();
 
