@@ -4,7 +4,7 @@ import 'dart:io';
 void main(List<String> args) {
   try {
     print(execute(args));
-  } catch (e, _) {
+  } catch (e) {
     stderr.writeln(e);
     exit(1);
   }
