@@ -4,6 +4,8 @@ Write TODOs in code that ensure you actually do them.
 
 Inspired by [searls/todo_or_die](https://github.com/searls/todo_or_die).
 
+<sub>**AI disclaimer:** GPT-5.6 was used to write test cases, audit the code and write documentation. Any AI-generated output has been audited and partly rewritten by me (@Komposten).</sub>
+
 ## Features
 
 - Mark a TODO with a **due date** — it throws once the date passes.
