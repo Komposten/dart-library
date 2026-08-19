@@ -4,6 +4,8 @@ Convenient and simple cross-platform isolate runners.
 
 Run heavy computations or background work in isolates with a clean API — single values, streams, or full two-way communication.
 
+<sub>**AI disclaimer:** GPT-5.4 was used to generate the initial version/template for this code. It has since been almost completely rewritten by me (@Komposten). GPT models (5.5-5.6) have also been used to write tests and documentation, but all AI-generated contributions have been audited by me.</sub>
+
 ## Features
 
 - **`Aside.run()`** — run a function in an isolate and get a single return value.

@@ -2,7 +2,9 @@
 
 A collection of small Dart snippets and scripts provided as reusable packages.
 
-All code in this library is cross-platform and works on both the Dart VM and on web.
+All code in this library is cross-platform and works on both the Dart VM and on web. It is also fully self-contained, with none of the packages defined here using any third-party dependencies (including no dependencies to other packages defined in this repo).
+
+<sub>**AI disclaimer:** Some of these packages contain AI-generated or AI-assisted code. See the README.md files for the individual packages for more details. All AI-generated code has been audited, tested and often rewritten by me (@Komposten).</sub>
 
 ## Packages
 
