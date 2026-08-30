@@ -139,20 +139,26 @@ class Aside {
 
     sub = mainReceive.listen((dynamic raw) async {
       if (raw is! List || raw.isEmpty || raw[0] is! _MessageType) {
-        return;
+        throw ArgumentError(
+          'Received non-list, empty list or list without $_MessageType: $raw',
+        );
       }
 
       final type = raw[0];
-      if (type == _MessageType.port) {
+      if (type == _MessageType.port && raw[1] is SendPort) {
         portCompleter.complete(raw[1] as SendPort);
-      } else if (type == _MessageType.data && raw.length >= 2) {
+      } else if (type == _MessageType.data && raw.length == 2) {
         onData(raw[1] as R);
       } else if (type == _MessageType.error) {
         onError(raw[1], raw.length > 2 ? raw[2] : null);
-      } else {
+      } else if (type == _MessageType.exit) {
         onExit();
         await sub.cancel();
         mainReceive.close();
+      } else {
+        throw ArgumentError(
+          'Received list with unexpected $_MessageType or value: $raw',
+        );
       }
     });
 
@@ -207,13 +213,23 @@ class Aside {
     final receivePort = Isolates.receivePort();
     messageChannel._port(receivePort.sendPort);
     receivePort.listen((raw) {
-      if (raw is List && raw.isNotEmpty && raw[0] is _MessageType) {
-        final type = raw[0];
-        if (type == _MessageType.data && raw.length >= 2) {
-          streamController.add(raw[1]);
-        } else if (type == _MessageType.error) {
-          streamController.addError(raw[1], raw.length > 2 ? raw[2] : null);
-        }
+      if (raw is! List || raw.isEmpty || raw[0] is! _MessageType) {
+        throw ArgumentError(
+          'Received non-list, empty list or list without $_MessageType: $raw',
+        );
+      }
+
+      final type = raw[0];
+      if (type == _MessageType.data && raw.length == 2) {
+        streamController.add(raw[1]);
+      } else if (type == _MessageType.error) {
+        streamController.addError(raw[1], raw.length > 2 ? raw[2] : null);
+      } else if (type == _MessageType.exit) {
+        streamController.close();
+      } else {
+        throw ArgumentError(
+          'Received list with unexpected $_MessageType or value: $raw',
+        );
       }
     });
   }

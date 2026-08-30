@@ -35,6 +35,9 @@ void biStreamValues(
     onError: (error) {
       channel.error('Received error: $error');
     },
+    onDone: () {
+      channel.close();
+    },
   );
 
   await endSignal.future;
@@ -96,6 +99,18 @@ void main() {
           values.add(iterator.current);
         }
         expect(values, equals(['item 0', 'item 1', 'item 2']));
+      });
+
+      test('closeFromMainClosesStreamBack', () async {
+        final (stream, channel) = await Aside.biStream(biStreamValues, null);
+        final iterator = StreamIterator(stream);
+
+        expect(await iterator.moveNext(), isTrue);
+        expect(iterator.current, equals('waiting'));
+
+        channel.close();
+
+        expect(await iterator.moveNext(), isFalse);
       });
 
       test('errorMessageAndResult', () async {
