@@ -17,7 +17,8 @@ class MessageChannel<T> {
 
   void data(T data) => _reply.send([_MessageType.data, data]);
 
-  void error(dynamic error, [Object? stackTrace]) => _reply.send([_MessageType.error, error, ?stackTrace?.toString()]);
+  void error(dynamic error, [Object? stackTrace]) =>
+      _reply.send([_MessageType.error, error, ?stackTrace?.toString()]);
 
   void close() => _reply.send([_MessageType.exit]);
 }
@@ -28,17 +29,27 @@ class Aside {
   /// ```dart
   /// final result = await Aside.run(_heavyWork, input);
   /// ```
-  static Future<R> run<M, R>(FutureOr<R> Function(M) function, M message, {String? debugLabel}) {
+  static Future<R> run<M, R>(
+    FutureOr<R> Function(M) function,
+    M message, {
+    String? debugLabel,
+  }) {
     final completer = Completer<R>();
 
     _run(
       function,
       message,
       (R data) => !completer.isCompleted ? completer.complete(data) : null,
-      (dynamic error, String? stack) =>
-          !completer.isCompleted ? completer.completeError(AsideRemoteException(error, stack)) : null,
+      (dynamic error, String? stack) => !completer.isCompleted
+          ? completer.completeError(AsideRemoteException(error, stack))
+          : null,
       () => !completer.isCompleted
-          ? completer.completeError(AsideRemoteException('The isolate failed to produce a value', null))
+          ? completer.completeError(
+              AsideRemoteException(
+                'The isolate failed to produce a value',
+                null,
+              ),
+            )
           : null,
       type: _IsolateType.single,
       debugLabel: debugLabel,
@@ -53,14 +64,20 @@ class Aside {
   /// final result = Aside.stream(_heavyWork, input);
   /// result.listen(onData, onError: handleError);)
   /// ```
-  static Stream<R> stream<M, R>(FutureOr<void> Function(M, MessageChannel<R>) function, M message, {String? debugLabel}) {
+  static Stream<R> stream<M, R>(
+    FutureOr<void> Function(M, MessageChannel<R>) function,
+    M message, {
+    String? debugLabel,
+  }) {
     final streamController = StreamController<R>();
     _run(
       function,
       message,
-      (R data) => !streamController.isClosed ? streamController.add(data) : null,
-      (dynamic error, String? stack) =>
-          !streamController.isClosed ? streamController.addError(AsideRemoteException(error, stack)) : null,
+      (R data) =>
+          !streamController.isClosed ? streamController.add(data) : null,
+      (dynamic error, String? stack) => !streamController.isClosed
+          ? streamController.addError(AsideRemoteException(error, stack))
+          : null,
       () => streamController.close(),
       type: _IsolateType.stream,
       debugLabel: debugLabel,
@@ -89,9 +106,11 @@ class Aside {
     final sendPort = await _run<M, R, V>(
       function,
       message,
-      (R data) => !streamController.isClosed ? streamController.add(data) : null,
-      (dynamic error, String? stack) =>
-          !streamController.isClosed ? streamController.addError(AsideRemoteException(error, stack)) : null,
+      (R data) =>
+          !streamController.isClosed ? streamController.add(data) : null,
+      (dynamic error, String? stack) => !streamController.isClosed
+          ? streamController.addError(AsideRemoteException(error, stack))
+          : null,
       () => streamController.close(),
       type: _IsolateType.biStream,
       returnSendPort: true,
@@ -120,7 +139,9 @@ class Aside {
 
     sub = mainReceive.listen((dynamic raw) async {
       if (raw is! List || raw.isEmpty || raw[0] is! _MessageType) {
-        throw ArgumentError('Received non-list, empty list or list without $_MessageType: $raw');
+        throw ArgumentError(
+          'Received non-list, empty list or list without $_MessageType: $raw',
+        );
       }
 
       final type = raw[0];
@@ -135,7 +156,9 @@ class Aside {
         await sub.cancel();
         mainReceive.close();
       } else {
-        throw ArgumentError('Received list with unexpected $_MessageType or value: $raw');
+        throw ArgumentError(
+          'Received list with unexpected $_MessageType or value: $raw',
+        );
       }
     });
 
@@ -163,7 +186,9 @@ class Aside {
     final reply = init[2] as SendPort;
     final type = init[3] as _IsolateType;
     final messageChannel = (init[4] as MessageChannel)..init(reply);
-    final receiveController = type == _IsolateType.biStream ? init[5] as StreamController : null;
+    final receiveController = type == _IsolateType.biStream
+        ? init[5] as StreamController
+        : null;
 
     try {
       if (type == _IsolateType.single) {
@@ -181,12 +206,17 @@ class Aside {
     }
   }
 
-  static void _setUpSendPort(MessageChannel messageChannel, StreamController streamController) {
+  static void _setUpSendPort(
+    MessageChannel messageChannel,
+    StreamController streamController,
+  ) {
     final receivePort = Isolates.receivePort();
     messageChannel._port(receivePort.sendPort);
     receivePort.listen((raw) {
       if (raw is! List || raw.isEmpty || raw[0] is! _MessageType) {
-        throw ArgumentError('Received non-list, empty list or list without $_MessageType: $raw');
+        throw ArgumentError(
+          'Received non-list, empty list or list without $_MessageType: $raw',
+        );
       }
 
       final type = raw[0];
@@ -197,7 +227,9 @@ class Aside {
       } else if (type == _MessageType.exit) {
         streamController.close();
       } else {
-        throw ArgumentError('Received list with unexpected $_MessageType or value: $raw');
+        throw ArgumentError(
+          'Received list with unexpected $_MessageType or value: $raw',
+        );
       }
     });
   }
@@ -210,5 +242,6 @@ class AsideRemoteException implements Exception {
   final String? stackTraceString;
 
   @override
-  String toString() => 'AsideRemoteException: $error${stackTraceString != null ? '\n$stackTraceString' : ''}';
+  String toString() =>
+      'AsideRemoteException: $error${stackTraceString != null ? '\n$stackTraceString' : ''}';
 }
