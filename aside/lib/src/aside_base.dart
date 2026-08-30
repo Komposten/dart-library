@@ -149,7 +149,7 @@ class Aside {
         onData(raw[1] as R);
       } else if (type == _MessageType.error) {
         onError(raw[1], raw.length > 2 ? raw[2] : null);
-      } else {
+      } else if (type == _MessageType.exit) {
         onExit();
         await sub.cancel();
         mainReceive.close();
